@@ -1,0 +1,144 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "Kristine Wang, klw3685"
+date: ''
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", 
+    warning = F, message = F, tidy = TRUE, tidy.opts = list(width.cutoff = 60), 
+    R.options = list(max.print = 100))
+```
+
+## Data Wrangling and Data Exploration
+
+## Packages:
+```{R}
+library(datasets)
+#install.packages("tidyverse")
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(cluster)
+```   
+
+### Introduction 
+This dataset is about the types of arrests in the US and specific descriptives about each state. The "US Arrests" dataset contiains the variables: State, Murder, Assault, Urban pop, and Rape. The "state.x77" dataset contains the variables: State, Population, Income, Life Exp, Murder, HS Grad, Frost, and Area. These datasets were found in library(datasets). I used these data sets to see the difference between states with variables that aren't common and due to the raising assault incidences I became interested in this topic. I selected Texas to be the state where the arrests were examined in this project. I expect a highter assault inidicence with higher illiteracy rates.  
+
+
+### Tidying and Joining Dataset: 
+```{R}
+Arrests <- setNames(cbind(rownames(USArrests),USArrests, row.names=NULL),c("State", "Murder", "Assault","Urban Pop", "Rape"))
+Arrests 
+state <- setNames(cbind(rownames(state.x77),state.x77,row.names=NULL),c("State","Population","Income","Illiteracy","Life Exp","Murter","HS Grad","Frost","Area"))
+colnames(state)<- c("State","Population","Income","Illiteracy","Life Exp","Murder","HS Grad", "Frost","Area")
+
+```   
+
+The columns were renamed so the two datasets would have the same column name to join later. Fullarrests is a dataset with all combined data by "State" which was the common variable between the two datasets. There were 0 cases that were dropped after join. A problem that would occur is that there is a lot of variable. Joining a large datawet could make it messy. 
+
+Selectedarrests is a dataset used to tidy up the dataset and focus on a few varaibles. The selected variables in the dataset was chossen because they are numeric. 
+
+
+### Joining/Merging 
+```{R}
+state <- as.data.frame((state))
+fullarrests <- full_join(Arrests,state, by= "State")
+fullarrests
+#fulldataa <-Arrests %>% arrange(State) %>% bind_cols(arrange(state,State))
+
+selectedarrest <- fullarrests %>% select(-Murder.y) %>% mutate(assault_incidence= case_when(Assault >170 ~"High", Assault <= 170~"Low"))
+selectedarrest <- selectedarrest %>% mutate_at(2:12, function(x)as.numeric(as.character(x)))
+
+as.data.frame(head(selectedarrest))
+
+untidy<- selectedarrest %>% pivot_wider(names_from = "assault_incidence", values_from= "Assault")
+tidy<- untidy %>% pivot_longer(cols=c("High","Low"), names_to="assault_incidence", values_to= "Assault")
+tidy
+```   
+
+### Wrangling 
+```{R}
+moddata1 <- fullarrests %>% filter(State== "Texas") %>% select(Assault, Income)
+
+moddata1%>% mutate(assault_incidence = case_when(Assault >170 ~"high", Assault <=170~"low"))
+as.data.frame(head(moddata1))
+
+moddata2 <- fullarrests %>% group_by(State) %>% arrange(desc('Urban Pop')) %>% mutate(Rape_per_UrbanPop= Rape/`Urban Pop`)
+as.data.frame(head(moddata2))
+
+selectedarrest %>% summarize(mean_Income=mean(Income),sd_Income= sd(Income), variance= var(Income,y=NULL, na.rm=FALSE),count_Income= n(), quantile=qnorm(p=0.5,mean=mean_Income, sd=sd_Income),min_Income=min(Income),max_Income=max(Income),distinct_Income=n_distinct(Income),cor=cor(Murder.x,Income))
+
+selectedarrest %>% group_by(assault_incidence) %>% summarize(mean_murder= mean(Murder.x), sd_murder=sd(Murder.x),min_murder=min(Murder.x), max_murder=max(Murder.x), variance=var(Murder.x,y=NULL, na.rm = FALSE))
+
+```   
+
+The datasets moddata1 and moddata2 whos the six dply functions (filter, select, arrange, group_by, mutate, summarize). 
+Mutate was used to fine the proportion of Rape and Urban population. 
+
+
+
+### Visualizing 
+```{R}
+selectedarrest
+
+ggplot(selectedarrest, aes(Income, Illiteracy))+ geom_point(aes(color=assault_incidence))+ xlab("Income as of July 1, 1974 (per capita)")+ ylab("Illiteracy (%)")+ labs(colour= "Assault Incidence")+ theme(axis.text.x= element_text(angle=45, hjust=1))+ ggtitle("Income and Illiteracy Percentage") + scale_y_continuous(breaks= seq(0,3,0.5))+ theme(axis.line=element_line(colour = "darkblue", size=0.5, linetype="solid"))+ scale_color_manual(values = c("#E69F00", "56B4E9"))
+
+```
+ This show the plot betwene income levels, illiteracy percentage, and the assault incidence. 
+
+```{R}
+selectedarrest2 <- selectedarrest %>% mutate(Frost_Occurrence= case_when(Frost >156~ "Often", Frost<=156 & Frost>=52~"Average", Frost<52~ "Below Average"))
+selectedarrest2
+
+
+ggplot(selectedarrest2, aes(Frost_Occurrence, y=Rape, fill='Frost_Occurrence'))+ geom_bar(stat="summary", fun.y= "mean")+ geom_errorbar(stat="summary")+ theme(axis.text.x = element_text(angle=0, hjust=0.5))+ ggtitle("Frost Occurrence and Rape Arrests")+ ylab("Rape Arrests (per 100,000)")+ xlab("Frost Occurrence")+ labs(colour= "Frost Occurrence")+ scale_y_continuous(breaks= seq(0,30,5))+ scale_x_discrete(limits= c("Below Average","Average","Often"))+ scale_fill_manual(values= c("#66CC99","#E69F00","#56B4E9"))+ theme_bw()
+```
+
+This graph plots the occurrence of frost days with the number of rape arrests with standard errorbar. 
+
+```{R}
+
+ggplot(selectedarrest,aes(State))+ geom_bar(aes(y=Rape, fill=State),stat="summary",fun.y="mean")+ theme(axis.text.x = element_text(angle=55, hjust=1))+ ylab("Rape Arrests (per 100,000)")+ ggtitle("Rape Arrests per State")+ theme(legend.position = "none")
+
+```   
+
+This show the number of rape arrests for each individual state. 
+
+
+### Dimensionality Reduction 
+```{R}
+wss <- vector()
+for(i in 1:10){
+  temp<- selectedarrest %>% dplyr::select(Murder.x, Assault, 'Urban Pop', Rape, Population, Income, 'Illiteracy', 'Life Exp','HS Grad', Frost, Area) %>% kmeans(.,i)
+  wss[i]<- temp$tot.withinss
+}
+
+ggplot()+ geom_point(aes(x=1:10, y=wss))+ geom_path(aes(x=1:10, y=wss))+ xlab("clusters")+ scale_x_continuous(breaks=1:10)
+
+cluster_dat <-selectedarrest %>% dplyr::select(Murder.x, Assault, 'Urban Pop', Rape, Population, Income, 'Illiteracy', 'Life Exp','HS Grad', Frost, Area)
+
+kmeans1<- cluster_dat %>% scale %>% kmeans(3)
+kmeansclust<- cluster_dat %>% mutate(cluster= as.factor(kmeans1$cluster))
+kmeansclust %>% ggplot(aes(Income, Murder.x, color=cluster))+ geom_point()
+
+kmeansclust %>% mutate(Assault_incidence= selectedarrest$assault_incidence) %>% ggplot(aes(Murder.x, Income, color=Assault_incidence, shape=cluster))+ geom_point(size=4)+ ggtitle("Cluster using kmeans")
+
+pam1<- cluster_dat %>% pam(k=3)
+pancluster<- cluster_dat %>% mutate(cluster= as.factor(pam1$clustering))
+pancluster %>% ggplot(aes(Income, Murder.x, color=cluster))+geom_point()
+
+pancluster %>% group_by(cluster) %>% summarize_if(is.numeric,mean, na.rm=T)
+```   
+
+Kmeans was used to create a cluster graph. 
+
+
