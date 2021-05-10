@@ -9,3 +9,17 @@ description: ''
 ---
 
 
+Here is some javascript 
+
+
+```{r}
+
+s='hello world'
+str(s)
+
+str(1/7)
+
+
+```
+
+

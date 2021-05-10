@@ -13,7 +13,8 @@
       <pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/2021/05/09/javascript-stuff/</guid>
-      <description></description>
+      <description> Here is some javascript
+s=&amp;#39;hello world&amp;#39; str(s) ## chr &amp;quot;hello world&amp;quot; str(1/7) ## num 0.143 </description>
     </item>
     
     <item>
