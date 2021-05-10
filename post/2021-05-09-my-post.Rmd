@@ -10,9 +10,14 @@ description: ''
 
 Here is my post! 
 
+[Link to project 1](/project/project1/)
+
+[Link to google](https://www.google.com)
+
 ```{R}
 
 summary(iris)
 
 
 ```
+

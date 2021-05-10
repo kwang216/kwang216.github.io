@@ -54,7 +54,7 @@
       <div class="container">
         <div class="blog-post">
           <h3>
-            <strong><a href="../../project/project2/">Project 2</a></strong>
+            <strong><a href="../../project/kwproejct2/">Project 2</a></strong>
           </h3>
         </div>
  
@@ -131,7 +131,7 @@ library(glmnet)</code></pre>
 <pre><code>## Warning: stat_contour(): Zero contours were generated</code></pre>
 <pre><code>## Warning in min(x): no non-missing arguments to min; returning Inf</code></pre>
 <pre><code>## Warning in max(x): no non-missing arguments to max; returning -Inf</code></pre>
-<p><img src="../../project/project2_files/figure-html/cars-1.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/cars-1.png" width="672" /></p>
 <pre class="r"><code>man1&lt;- manova(cbind(year,mass)~fall, data=meteorites)
 summary(man1)</code></pre>
 <pre><code>##              Df Pillai approx F num Df den Df    Pr(&gt;F)    
@@ -201,7 +201,7 @@ head(fall_type)</code></pre>
 ## 5 Fell     780
 ## 6 Fell    4239</code></pre>
 <pre class="r"><code>ggplot(fall_type, aes(mass, fill=fall))+ geom_histogram(bins= 6.5)+ facet_wrap(~fall, ncol=2)</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>fall_type %&gt;% group_by(fall) %&gt;% summarize(means=mean(mass)) %&gt;% summarize(mean_diff= diff(means))</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 1 x 1
@@ -219,9 +219,9 @@ for (i in 1:5000){
   hist(rand_dist, main= &quot;&quot;, ylab=&quot;&quot;)
   abline(v= -32822.54, col=&quot;red&quot;)
 }</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
 <pre class="r"><code>mean(rand_dist&gt; 32822.54)*2 # P-value</code></pre>
-<pre><code>## [1] 0.2444</code></pre>
+<pre><code>## [1] 0.2736</code></pre>
 <p>Null Hypothesis: Mean mass is the same for fall_type(fell vs found) meteorites. Alternative Hypothesis: mean mass is not the same for fall_type(fell vs. found) meteorites. Based on this test, we fial to reject the null hypothesis. There is a probability of 0.279 to get a mean difference if the outcome data was split into every possible random grouping.</p>
 </div>
 <div id="linear-regression" class="section level2">
@@ -253,17 +253,17 @@ summary(fit1)</code></pre>
 ## F-statistic:  16.9 on 2 and 38112 DF,  p-value: 4.611e-08</code></pre>
 <pre class="r"><code>ggplot(meteorites, aes(y=long_c, x=lat_c, color=mass))+ geom_point()+ stat_smooth(method= &quot;lm&quot;, se= FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(meteorites, aes(y=mass, x=long_c))+ geom_point()+ stat_smooth(method= &quot;lm&quot;, se= FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
 <pre class="r"><code>ggplot(meteorites, aes(y=mass, x=lat_c))+ geom_point()+ stat_smooth(method= &quot;lm&quot;, se= FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
 <pre class="r"><code>qqnorm(meteorites$lat_c)</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
 <pre class="r"><code>qqnorm(meteorites$long_c)</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-5.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-5.png" width="672" /></p>
 <pre class="r"><code>shapiro.test(head(meteorites$lat_c))</code></pre>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
@@ -341,7 +341,7 @@ library(interactions)
 interact_plot(fit1, lat_c, long_c) #interaction plot</code></pre>
 <pre><code>## Warning: lat_c and long_c are not included in an interaction with one another in the
 ## model.</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-6.png" width="672" />
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-3-6.png" width="672" />
 For each one unit increase in mass, the latitude increases by 341.81. units and the longitude decreases by 54.17 units. The linearity assumption is violated based on the ggplot. There does seem to be a normality based on the qq plots. The Shapiro-Wilk, the p value &gt;0.05 implies that the distritubion of the data are not significantly different from normal distribution. In other words, we can assume the normality. Bresch-Paga test, the p value &lt;0.05 indicates that the null hypothesis can not be rejecte and therefore heterscedasticity does not exist. Both the t values and the p values decrease. The proportion of the variation in the outcome explained by this model is 0.000886.</p>
 </div>
 <div id="regression-with-interaction" class="section level2">
@@ -357,7 +357,7 @@ samp_distn&lt;- replicate(1000,{
 
 samp_distn %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept)      lat     long lat:long
-## 1    7053.038 146.8876 171.8534 2.373722</code></pre>
+## 1    6707.336 136.1068 169.4306 2.313339</code></pre>
 <pre class="r"><code>summary(fit2)</code></pre>
 <pre><code>## 
 ## Call:
@@ -424,9 +424,9 @@ table(predict= as.numeric(meteorites$prob&gt; 0.5), truth= meteorites$y) %&gt;% 
 <pre class="r"><code>pca1&lt;- princomp(meteorites[c(&quot;year&quot;,&quot;mass&quot;)])
 meteorites$predictor&lt;- pca1$scores[,1]
 ggplot(meteorites, aes(predictor, prob))+ geom_point(aes(color=fall), alpha= 0.5, size=3)</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(meteorites)+ geom_density(aes(prob, fill=y))+ xlab(&quot;logit&quot;) #plot density of log-odds by binary outcome variable </code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
 <pre class="r"><code>sens&lt;- function(p, data=meteorites, y=y) mean(meteorites[meteorites$y== 1, ]$prob&gt;p)
 spec&lt;- function(p, data=meteorites, y=y) mean(meteorites[meteorites$y== 0, ]$prob&lt;p)
 
@@ -436,14 +436,14 @@ specificity&lt;- sapply(seq(0,1,0.01), spec, meteorites)
 ROC1&lt;- data.frame(sensitivity, specificity, cutoff= seq(0, 1, 0.01))
 ROC1 %&gt;% gather(key, rate, -cutoff) %&gt;% ggplot(aes(cutoff, rate, color=key))+ geom_path() %&gt;% geom_vline(xintercept= c(0.1, 0.5), lty=2, color=&quot;gray50&quot;)</code></pre>
 <pre><code>## Warning: geom_vline(): Ignoring `mapping` because `xintercept` was provided.</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
 <pre class="r"><code>#?? 
 
 ROC1$TPR&lt;- sensitivity
 ROC1$FPR&lt;- 1- sensitivity
 #ROC1%&gt;%ggplot(aes(FPR,TPR))+geom_path(size=1.5)+geom_segment(aes(x=0,y=0,xend=1,yend=1),scale_x_continuous(limits = c(0,1))
 ROC1 %&gt;% ggplot(aes(FPR, TPR))+ geom_path(size=1.5)+ geom_segment(aes(x=0, y=0, xend=1, yend=1),lty=2)+ scale_x_continuous(limits = c(0,1))</code></pre>
-<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
+<p><img src="../../project/kwProejct2_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
 <pre class="r"><code>library(plotROC)
 ROCplot&lt;- ggplot(meteorites)+ geom_roc(aes(d=y, m=predictor), n.cuts = 0)
 calc_auc(ROCplot) #AUC</code></pre>
@@ -504,16 +504,16 @@ lasso1&lt;- glmnet(x,y, family=&quot;binomial&quot;, lambda = cv$lambda.1se)
 coef(lasso1)</code></pre>
 <pre><code>## 6 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                          s0
-## (Intercept)     4.418861635
+## (Intercept)     4.626924847
 ## (Intercept)     .          
-## name_typeValid -0.799732814
+## name_typeValid -0.968619234
 ## mass            .          
-## lat            -0.048641737
-## long           -0.003607069</code></pre>
+## lat            -0.050186572
+## long           -0.004033743</code></pre>
 <pre class="r"><code>prob&lt;- predict(lasso1, newx= x, type=&quot;response&quot;)
 class_diag(prob, meteorites$y)</code></pre>
 <pre><code>##         acc      sens        spec       ppv       auc
-## 1 0.9717696 0.9996491 0.001877934 0.9720997 0.9209166</code></pre>
+## 1 0.9716647 0.9995412 0.001877934 0.9720968 0.9207447</code></pre>
 <pre class="r"><code>k=10 
 meteorites$valid&lt;- x[, &quot;name_typeValid&quot;]
 data2&lt;- meteorites[sample(nrow(meteorites)),]
@@ -532,7 +532,7 @@ for(i in 1:k){
 
 apply(diags,2, mean)</code></pre>
 <pre><code>##        acc       sens       spec        ppv        auc 
-## 0.97100858 0.99735504 0.05523351 0.97347198 0.91748286</code></pre>
+## 0.97111365 0.99743602 0.05547154 0.97349921 0.91766931</code></pre>
 <pre class="r"><code>summary(fit8)</code></pre>
 <pre><code>## 
 ## Call:
